@@ -4,7 +4,6 @@ import json
 from pprint import pprint
 import os.path
 
-
 def print_multiple_choice(list_of_choices: list, phrase: str):
     print(phrase)
     for i in range(len(list_of_choices)):
