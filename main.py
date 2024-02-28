@@ -4,6 +4,7 @@ import json
 from pprint import pprint
 import os.path
 
+
 def print_multiple_choice(list_of_choices: list, phrase: str):
     print(phrase)
     for i in range(len(list_of_choices)):
@@ -11,7 +12,7 @@ def print_multiple_choice(list_of_choices: list, phrase: str):
 
 
 def check_int_in_range(min: int, max: int) -> str:
-    check = input()
+    check = input("Введите число: ")
     while not check.isdecimal() or int(check) > max or int(check) < min:
         print("Число введено неверно...")
         check = input("Введите число заного: ")
@@ -44,6 +45,7 @@ def check_name():
 
 
 def check_permission_level(permission_list: list):
+    print_multiple_choice(permission_list, "Выберите нужный уровень: ")
     permission_level = input("Введите цифру: ")
     while not permission_level.isdecimal() or int(permission_level) >= len(permission_list):
         print("Неверное значение...")
@@ -53,6 +55,7 @@ def check_permission_level(permission_list: list):
 
 def get_time() -> str:
     return datetime.now(tz=ZoneInfo("Europe/Moscow")).strftime("%Y-%m-%d %H:%M:%S")
+
 
 def input_data_about_employee(db: dict, permission_list: list):
     for i in list(db.keys()):
@@ -70,8 +73,6 @@ def input_data_about_employee(db: dict, permission_list: list):
 
     time = get_time()
 
-
-
     db[card_number] = {"name":name, "permission_level":permission_level, "add_time":time}
 
     print(f"Человеку с именем - {name} была присвоена карта с номером - {card_number}")
@@ -81,12 +82,15 @@ def input_data_about_employee(db: dict, permission_list: list):
 def change_data_in_db(change_variables: list[str], db: dict, permission_list: list):
     card_number = input("Введите номер карты, для которой нужно изменить данные: ")
 
-    print("Выберите что хотите изменить")
-    for i in range(len(change_variables)):
-        print(f'"{i}" - {change_variables[i]}')
-    to_change = int(check_int_in_range(0, len(change_variables)))
+    if db[card_number] == {}:
+        print("Данные карты пусты. Изменить нечего...\n")
+
+        return
 
     time = get_time()
+
+    print_multiple_choice(change_variables, "Выберите что хотите изменить:")
+    to_change = int(check_int_in_range(0, len(change_variables)))
 
     match to_change:
         case 0:
@@ -111,11 +115,12 @@ def get_dict_from_json() -> dict:
             return data
     return {"0000": {}}
 
+change_variables = ["name", "permission_level"]
+permission_list = ["Обычный", "Склад"]
+
 if __name__ == "__main__":
     data = get_dict_from_json()
 
-    change_variables = ["name", "permission_level"]
-    permission_list = ["Обычный", "Склад"]
 
     while True:
         modes = ["Добавить нового сотрудника", "Изменить данные карты",

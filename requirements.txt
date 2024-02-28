@@ -1,1 +1,2 @@
-DateTime
+DateTime~=5.4
+customtkinter~=5.2.2
